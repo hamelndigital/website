@@ -1,0 +1,22 @@
+# Production — built image behind Traefik on the shared edge network.
+# No published ports: the container is only reachable through Traefik.
+name: hamelndigital-website
+
+services:
+  website:
+    build: .
+    restart: unless-stopped
+    labels:
+      - "traefik.enable=true"
+      - "traefik.docker.network=eucent-edge"
+      - "traefik.http.routers.hamelndigital-website.rule=Host(`hamelndigital.de`)"
+      - "traefik.http.routers.hamelndigital-website.entrypoints=websecure"
+      - "traefik.http.routers.hamelndigital-website.tls=true"
+      - "traefik.http.routers.hamelndigital-website.tls.certresolver=letsencrypt"
+      - "traefik.http.services.hamelndigital-website.loadbalancer.server.port=3000"
+    networks:
+      - eucent-edge
+
+networks:
+  eucent-edge:
+    external: true

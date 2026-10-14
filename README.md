@@ -13,6 +13,20 @@ Initial corporate website for **hamelndigital** — _Tools for the modern intern
 ```bash
 bun install
 bun dev        # http://localhost:3000
+
+# or in Docker (source mounted, hot reload):
+docker-compose -f compose.dev.yaml up   # http://localhost:3000
+```
+
+## Deploy
+
+`compose.yaml` builds the production image and attaches it to the external
+`eucent-edge` network; Traefik routes `hamelndigital.de` (`websecure`,
+`letsencrypt` resolver). No ports are published — the app is only reachable
+through Traefik.
+
+```bash
+docker-compose up -d --build
 ```
 
 ## Verify
