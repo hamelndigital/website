@@ -94,13 +94,5 @@ export const siteConfig = {
    * Footer navigation. Add groups and links here as the site grows —
    * the footer renders whatever is configured.
    */
-  footerNav: [
-    {
-      title: "Legal",
-      links: [
-        { href: "/imprint", label: "Imprint" },
-        { href: "/privacy", label: "Privacy Policy" },
-      ],
-    },
-  ] satisfies FooterNavGroup[],
+  footerNav: [] as FooterNavGroup[],
 } as const;

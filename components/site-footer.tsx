@@ -27,6 +27,7 @@ export function SiteFooter() {
           >
             <SiteLogo markClassName="h-6" textClassName="text-[15px]" />
           </Link>
+          {siteConfig.footerNav.length > 0 && (
           <nav
             aria-label="Footer"
             className="flex flex-wrap gap-x-16 gap-y-10"
@@ -51,6 +52,7 @@ export function SiteFooter() {
               </div>
             ))}
           </nav>
+          )}
         </div>
         <div className="mt-12 border-t border-separator pt-6">
           <p className="text-sm text-muted">
