@@ -1,26 +1,155 @@
 @import "tailwindcss";
-
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
+@import "@heroui/styles";
 
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+/* hamelndigital brand tokens — light-only theme */
+:root {
+  --background: var(--white);
+  --accent: #1b6ffd; /* exact blue sampled from the brand mark */
+  --link: var(--accent);
+}
+
+::selection {
+  background: color-mix(in oklab, var(--accent) 18%, transparent);
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  html {
+    scroll-behavior: smooth;
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+/*
+ * Dark band transition — the hero is pinned (sticky) and the dark band
+ * slides over it, so the whole viewport turns dark while scrolling.
+ * Pure CSS scroll-driven content fade; gated to browsers with scroll-driven
+ * animations and users without a reduced-motion preference.
+ */
+@media (prefers-reduced-motion: no-preference) {
+  @supports (animation-timeline: view()) {
+    .dark-reveal-content {
+      animation: dark-reveal-content linear both;
+      animation-timeline: view();
+      animation-range: entry 15% entry 90%;
+    }
+  }
+}
+
+/*
+ * Jagged edge — a sawtooth of downward-pointing teeth along the bottom of the
+ * dark band, so it tears into the light contact section below. Tunable via
+ * --tooth-pitch (tooth spacing) and --tooth-depth (tooth height).
+ */
+.jagged-edge {
+  --tooth-pitch: 24px;
+  --tooth-depth: 12px;
+  -webkit-mask-image:
+    linear-gradient(#000, #000),
+    conic-gradient(from -45deg at 50% 100%, #000 90deg, #0000 0);
+  mask-image:
+    linear-gradient(#000, #000),
+    conic-gradient(from -45deg at 50% 100%, #000 90deg, #0000 0);
+  -webkit-mask-position: 0 0, 50% 100%;
+  mask-position: 0 0, 50% 100%;
+  -webkit-mask-size:
+    100% calc(100% - var(--tooth-depth)),
+    var(--tooth-pitch) var(--tooth-depth);
+  mask-size:
+    100% calc(100% - var(--tooth-depth)),
+    var(--tooth-pitch) var(--tooth-depth);
+  -webkit-mask-repeat: no-repeat, repeat-x;
+  mask-repeat: no-repeat, repeat-x;
+}
+
+@keyframes dark-reveal-content {
+  from {
+    opacity: 0;
+    transform: translateY(1.5rem);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/*
+ * Company timeline — a muted rail with an accent line that fills as the
+ * list travels through the viewport. Without scroll-driven animation
+ * support (or reduced motion) the accent rail renders fully drawn.
+ */
+.company-timeline {
+  position: relative;
+}
+
+.company-timeline::before {
+  content: "";
+  position: absolute;
+  top: 11px;
+  bottom: 11px;
+  left: 5.5px;
+  width: 1px;
+  background: var(--separator);
+}
+
+.company-timeline::after {
+  content: "";
+  position: absolute;
+  top: 11px;
+  bottom: 11px;
+  left: 5px;
+  width: 3px;
+  border-radius: 9999px;
+  background: var(--accent);
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  @supports (animation-timeline: view()) {
+    .company-timeline::after {
+      transform-origin: top;
+      animation: timeline-grow linear both;
+      animation-timeline: view();
+      animation-range: entry 15% cover 40%;
+    }
+  }
+}
+
+@keyframes timeline-grow {
+  from {
+    transform: scaleY(0);
+  }
+  to {
+    transform: scaleY(1);
+  }
+}
+
+/* Accent node on the rail — the background-colored ring cuts it out of the
+   line, the faint glow keeps it from floating flat on the dark band. */
+.timeline-dot {
+  position: absolute;
+  left: 0;
+  top: 5px;
+  width: 12px;
+  height: 12px;
+  border-radius: 9999px;
+  background: var(--accent);
+  box-shadow:
+    0 0 0 4px var(--background),
+    0 0 18px color-mix(in oklab, var(--accent) 55%, transparent);
+}
+
+/* Vertical rhythm for long-form legal documents rendered with .typography-prose */
+.legal-prose > * + * {
+  margin-top: 1rem;
+}
+
+.legal-prose h2 {
+  margin-top: 2.75rem;
+}
+
+.legal-prose h3 {
+  margin-top: 2rem;
 }

@@ -1,36 +1,44 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# hamelndigital
 
-## Getting Started
+Initial corporate website for **hamelndigital** — _Tools for the modern internet._
 
-First, run the development server:
+## Stack
+
+- [Next.js](https://nextjs.org) (App Router, Cache Components) + React 19 + TypeScript (strict)
+- [HeroUI v3](https://heroui.com) (`@heroui/react` + `@heroui/styles`, no provider needed)
+- Tailwind CSS v4 · Bun
+
+## Develop
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+bun install
+bun dev        # http://localhost:3000
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Verify
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```bash
+bun run lint
+bunx tsc --noEmit
+bun run build
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Configuration
 
-## Learn More
+Everything editable lives in `lib/site.ts`:
 
-To learn more about Next.js, take a look at the following resources:
+| Key | Purpose | Status |
+| --- | --- | --- |
+| `url` | Production origin — used for `metadataBase`, Open Graph, `sitemap.xml`, `robots.txt` | **TODO before publishing** (currently empty) |
+| `contactEmail` | Public contact address — used by all contact actions and legal pages | **TODO before publishing** (placeholder `…@hamelndigital.example`, RFC 2606 reserved TLD) |
+| `nav` | Header nav links (`/software`, `/company` reserve routes that do not exist yet) | configured |
+| `portalUrl` | Customer portal URL for the header "Log in" action — currently the reserved route `/login` | **TODO before publishing** |
+| `footerNav` | Footer link groups — extend as the site grows | configured |
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Before publishing
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+- [ ] Set `url` and `contactEmail` in `lib/site.ts`.
+- [ ] Fill all `[TODO: …]` placeholders in `app/imprint/page.tsx` (legal entity, address, representative, register, VAT ID, MStV responsibility) and have them legally reviewed.
+- [ ] Complete the marked sections in `app/privacy/page.tsx` (hosting provider, log retention, review date) and verify the statements match the actual deployment.
 
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+The legal pages are **not publication-ready** until these details are supplied and reviewed.
